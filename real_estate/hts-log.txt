@@ -1,0 +1,21 @@
+HTTrack3.50-0 launched on Sun, 06 Sep 2026 15:44:28 at https://marcimetzger.com +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2%f#f -F "Mozilla/5.0 (compatible; HTTrack; +https://www.httrack.com/)" -%F "<!-- Mirrored from {url} by HTTrack Website Copier/3.x [XR&CO], {date} -->" -%l "en, *" https://marcimetzger.com -O1 "C:\Users\pasio\Downloads\Luxury_WebBuild\real_estate" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+15:44:50	Error: 	"Forbidden" (403) at link img1.wsimg.com/signals/js/clients/scc-c2/scc-c2.min.js (from https://marcimetzger.com/)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/e (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/String(e (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/e.url (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/e.url,location.href (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/e,location.href (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/s,location.href (from https://marcimetzger.com/sw.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/"//theridgerealty.idxbroker.com/idx/widgets/14550"></script></body>" (from https://marcimetzger.com/listings)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/e.url,s.base (from img1.wsimg.com/blobby/go/067a4d42-19e8-46d9-9bed-578bf62dd44e/gpub/704363f8bb1da2d4/script.js)
+15:44:50	Error: 	"Not Found" (404) at link https://marcimetzger.com/~/ (from img1.wsimg.com/blobby/go/067a4d42-19e8-46d9-9bed-578bf62dd44e/gpub/704363f8bb1da2d4/script.js)
+
+HTTrack Website Copier/3.50-0 mirror complete in 22 seconds : 28 links scanned, 17 files written (2223751 bytes overall) [1845875 bytes received at 83903 bytes/sec], 2919857 bytes transferred using HTTP compression in 26 files, ratio 27%, 3.6 requests per connection
+(10 errors, 0 warnings, 0 messages)
