@@ -45,36 +45,90 @@
     reveals.forEach(function (el) { el.classList.add("in-view"); });
   }
 
-  /* ---------- Gallery carousel ---------- */
+  /* ---------- Gallery carousel (center slide + prev/next peek) ---------- */
   var track = document.getElementById("galleryTrack");
   var prev = document.getElementById("galleryPrev");
   var next = document.getElementById("galleryNext");
   var dotsEl = document.getElementById("galleryDots");
-  var slides = track.children;
-  var index = 0;
+  var realSlides = Array.prototype.slice.call(track.children);
+  var n = realSlides.length;
 
-  for (var i = 0; i < slides.length; i++) {
-    var dot = document.createElement("button");
-    dot.setAttribute("aria-label", "Go to photo " + (i + 1));
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", (function (n) { return function () { go(n); }; })(i));
-    dotsEl.appendChild(dot);
+  if (n > 1) {
+    // Clone first/last so the wrap-around always has a peek on both sides
+    var firstClone = realSlides[0].cloneNode(true);
+    var lastClone = realSlides[n - 1].cloneNode(true);
+    firstClone.setAttribute("aria-hidden", "true");
+    lastClone.setAttribute("aria-hidden", "true");
+    track.insertBefore(lastClone, realSlides[0]);
+    track.appendChild(firstClone);
+
+    var all = track.children;
+    var pos = 1;
+
+    for (var i = 0; i < n; i++) {
+      var dot = document.createElement("button");
+      dot.setAttribute("aria-label", "Go to photo " + (i + 1));
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", (function (k) { return function () { go(k + 1); }; })(i));
+      dotsEl.appendChild(dot);
+    }
+    var dots = dotsEl.children;
+
+    function targetLeft(p) {
+      return all[p].offsetLeft + all[p].clientWidth / 2 - track.clientWidth / 2;
+    }
+
+    function scrollTo(p, smooth) {
+      track.scrollTo({ left: targetLeft(p), behavior: smooth ? "smooth" : "auto" });
+    }
+
+    function setActive(p) {
+      for (var i = 0; i < all.length; i++) all[i].classList.toggle("active", i === p);
+      for (var d = 0; d < dots.length; d++) dots[d].classList.toggle("active", d === p - 1);
+    }
+
+    function nearest() {
+      var cx = track.scrollLeft + track.clientWidth / 2;
+      var best = 0, bestD = Infinity;
+      for (var i = 0; i < all.length; i++) {
+        var d = Math.abs(all[i].offsetLeft + all[i].clientWidth / 2 - cx);
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      return best;
+    }
+
+    function go(p) {
+      pos = ((p - 1) % n + n) % n + 1; // keep within 1..n
+      scrollTo(pos, true);
+      setActive(pos);
+    }
+
+    function normalize() {
+      var p = nearest();
+      if (p === 0) { pos = n; scrollTo(n, false); setActive(n); }
+      else if (p === n + 1) { pos = 1; scrollTo(1, false); setActive(1); }
+      else if (p !== pos) { pos = p; setActive(p); }
+    }
+
+    var idle;
+    track.addEventListener("scroll", function () {
+      setActive(nearest());
+      clearTimeout(idle);
+      idle = setTimeout(normalize, 140);
+    }, { passive: true });
+
+    prev.addEventListener("click", function () { go(pos - 1); });
+    next.addEventListener("click", function () { go(pos + 1); });
+
+    var auto = setInterval(function () { go(pos + 1); }, 5000);
+    track.addEventListener("mouseenter", function () { clearInterval(auto); });
+    track.addEventListener("mouseleave", function () {
+      auto = setInterval(function () { go(pos + 1); }, 5000);
+    });
+
+    scrollTo(1, false);
+    setActive(1);
   }
-  var dots = dotsEl.children;
-
-  function go(n) {
-    index = (n + slides.length) % slides.length;
-    track.scrollTo({ left: slides[index].offsetLeft, behavior: "smooth" });
-    for (var d = 0; d < dots.length; d++) dots[d].classList.toggle("active", d === index);
-  }
-  prev.addEventListener("click", function () { go(index - 1); });
-  next.addEventListener("click", function () { go(index + 1); });
-
-  var auto = setInterval(function () { go(index + 1); }, 5000);
-  track.addEventListener("mouseenter", function () { clearInterval(auto); });
-  track.addEventListener("mouseleave", function () {
-    auto = setInterval(function () { go(index + 1); }, 5000);
-  });
 
   /* ---------- Contact form ---------- */
   var form = document.getElementById("contactForm");
