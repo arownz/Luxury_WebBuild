@@ -81,7 +81,7 @@
       var dot = document.createElement("button");
       dot.setAttribute("aria-label", "Go to photo " + (i + 1));
       var thumb = document.createElement("img");
-      thumb.src = realSlides[i].getAttribute("src");
+      thumb.src = realSlides[i].querySelector("img").getAttribute("src");
       thumb.alt = "";
       thumb.loading = "lazy";
       thumb.decoding = "async";
