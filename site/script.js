@@ -138,6 +138,35 @@
     prev.addEventListener("click", function () { go(pos - 1); });
     next.addEventListener("click", function () { go(pos + 1); });
 
+    // Hand horizontal dragging (mouse + touch)
+    track.addEventListener("dragstart", function (e) { e.preventDefault(); });
+    var isDown = false, startX = 0, scrollLeftStart = 0;
+    track.addEventListener("mousedown", function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      isDown = true;
+      track.style.scrollSnapType = "none";
+      track.style.cursor = "grabbing";
+      track.style.userSelect = "none";
+      startX = e.pageX;
+      scrollLeftStart = track.scrollLeft;
+    });
+    function stopDrag() {
+      if (!isDown) return;
+      isDown = false;
+      track.style.scrollSnapType = "";
+      track.style.cursor = "";
+      track.style.userSelect = "";
+    }
+    window.addEventListener("mousemove", function (e) {
+      if (!isDown) return;
+      var dx = e.pageX - startX;
+      track.scrollLeft = scrollLeftStart - dx;
+    });
+    window.addEventListener("mouseup", stopDrag);
+    track.addEventListener("mouseleave", stopDrag);
+    track.addEventListener("blur", stopDrag);
+
     var auto = setInterval(function () { go(pos + 1); }, 5000);
     track.addEventListener("mouseenter", function () { clearInterval(auto); });
     track.addEventListener("mouseleave", function () {
