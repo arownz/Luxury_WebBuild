@@ -586,7 +586,7 @@ body.no-scroll {
 
 .hero-title span {
   display: block;
-  color: var(--ink-soft);
+  color: var(#e0c48c);
 }
 
 .hero-tagline {
