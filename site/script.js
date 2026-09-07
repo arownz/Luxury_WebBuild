@@ -17,14 +17,26 @@
     var open = nav.classList.toggle("open");
     toggle.classList.toggle("open", open);
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.classList.toggle("no-scroll", open);
   });
   nav.querySelectorAll("a").forEach(function (link) {
     link.addEventListener("click", function () {
       nav.classList.remove("open");
       toggle.classList.remove("open");
       toggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("no-scroll");
     });
   });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && nav.classList.contains("open")) {
+      nav.classList.remove("open");
+      toggle.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("no-scroll");
+    }
+  });
+
+  /* ---------- Scroll-pan parallax is pure CSS (background-attachment: fixed ≥1024px) ---------- */
 
   /* ---------- Reveal on scroll ---------- */
   var reveals = document.querySelectorAll(".reveal");
@@ -49,7 +61,7 @@
   var track = document.getElementById("galleryTrack");
   var prev = document.getElementById("galleryPrev");
   var next = document.getElementById("galleryNext");
-  var dotsEl = document.getElementById("galleryDots");
+  var dotsEl = document.getElementById("galleryThumbs");
   var realSlides = Array.prototype.slice.call(track.children);
   var n = realSlides.length;
 
@@ -68,6 +80,12 @@
     for (var i = 0; i < n; i++) {
       var dot = document.createElement("button");
       dot.setAttribute("aria-label", "Go to photo " + (i + 1));
+      var thumb = document.createElement("img");
+      thumb.src = realSlides[i].getAttribute("src");
+      thumb.alt = "";
+      thumb.loading = "lazy";
+      thumb.decoding = "async";
+      dot.appendChild(thumb);
       if (i === 0) dot.classList.add("active");
       dot.addEventListener("click", (function (k) { return function () { go(k + 1); }; })(i));
       dotsEl.appendChild(dot);
@@ -129,6 +147,33 @@
     scrollTo(1, false);
     setActive(1);
   }
+
+  /* ---------- Office hours: open-today dropdown (reference-style) ---------- */
+  var hoursToggle = document.getElementById("hoursToggle");
+  var hoursList = document.getElementById("hoursList");
+  hoursToggle.addEventListener("click", function () {
+    var open = hoursToggle.getAttribute("aria-expanded") === "true";
+    hoursToggle.setAttribute("aria-expanded", open ? "false" : "true");
+  });
+  if (hoursList) {
+    var today = new Date();
+    var todayName = today.toLocaleDateString("en-US", { weekday: "long" });
+    var todayShort = today.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    hoursList.querySelectorAll("li").forEach(function (li) {
+      if (li.getAttribute("data-day") === todayName) {
+        li.classList.add("today");
+        document.getElementById("hoursLabel").innerHTML =
+          "Open today <span style=\"font-weight:700;color:#e0c48c\">(" + todayShort + ")</span>: 08:00 am &ndash; 07:00 pm";
+      }
+    });
+  }
+
+  /* ---------- Cookie banner (demo: no storage, reappears each load) ---------- */
+  var cookie = document.getElementById("cookieBanner");
+  setTimeout(function () { cookie.classList.add("show"); }, 900);
+  document.getElementById("cookieAccept").addEventListener("click", function () {
+    cookie.classList.remove("show");
+  });
 
   /* ---------- Contact form ---------- */
   var form = document.getElementById("contactForm");
