@@ -1,4 +1,0 @@
-# HTTrack Website Copier Cookie File
-# This file format is compatible with Netscape cookies
-marcimetzger.com	TRUE	/	FALSE	1999999999	dps_site_id	ap-southeast-1
-
